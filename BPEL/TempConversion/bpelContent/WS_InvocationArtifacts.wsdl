@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://webservices.daehosting.com/temperature" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" name="WS_Invocation" targetNamespace="http://webservices.daehosting.com/temperature">
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     TYPE DEFINITION - List of types participating in this BPEL process 
+     The BPEL Designer will generate default request and response types
+     but you can define or import any XML Schema type and use them as part 
+     of the message types.
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
+    <plnk:partnerLinkType name="TempConversionPLT">
+    <plnk:role name="TempConversionPLRole" portType="tns:TemperatureConversionsSoapType"/>
+  </plnk:partnerLinkType>
+    <import location="http://webservices.daehosting.com/services/TemperatureConversions.wso?WSDL" namespace="http://webservices.daehosting.com/temperature"/>
+    <types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://webservices.daehosting.com/temperature">
+
+            <element name="WS_InvocationRequest">
+                <complexType>
+                    <sequence>
+                        <element name="input" type="string"/>
+                    </sequence>
+                </complexType>
+            </element>
+
+            <element name="WS_InvocationResponse">
+                <complexType>
+                    <sequence>
+                        <element name="result" type="string"/>
+                    </sequence>
+                </complexType>
+            </element>
+        </schema>
+    </types>
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     MESSAGE TYPE DEFINITION - Definition of the message types used as 
+     part of the port type defintions
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
+    <message name="WS_InvocationRequestMessage">
+        <part element="tns:WS_InvocationRequest" name="payload"/>
+    </message>
+    <message name="WS_InvocationResponseMessage">
+        <part element="tns:WS_InvocationResponse" name="payload"/>
+    </message>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     PORT TYPE DEFINITION - A port type groups a set of operations into
+     a logical service unit.
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
+
+    <!-- portType implemented by the WS_Invocation BPEL process -->
+    <portType name="WS_Invocation">
+        <operation name="process">
+            <input message="tns:WS_InvocationRequestMessage"/>
+            <output message="tns:WS_InvocationResponseMessage"/>
+        </operation>
+    </portType>   
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     PARTNER LINK TYPE DEFINITION
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
+    <plnk:partnerLinkType name="WS_Invocation">
+        <plnk:role name="WS_InvocationProvider" portType="tns:WS_Invocation"/>
+    </plnk:partnerLinkType>
+    
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     BINDING DEFINITION - Defines the message format and protocol details
+     for a web service.
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <binding name="WS_InvocationBinding" type="tns:WS_Invocation">
+    	<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    	<operation name="process">
+    		<soap:operation soapAction="http://webservices.daehosting.com/temperature/process"/>
+    		<input>
+    			<soap:body use="literal"/>
+    		</input>
+    		<output>
+    			<soap:body use="literal"/>
+    		</output>
+    	</operation>
+    </binding>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     SERVICE DEFINITION - A service groups a set of ports into
+     a service unit.
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <binding name="WSInvocationSOAPBinding" type="tns:WS_Invocation">
+    	<soap:binding style="document"
+    		transport="http://schemas.xmlsoap.org/soap/http" />
+    	<operation name="process">
+    		<soap:operation
+    			soapAction="http://webservices.daehosting.com/temperature/process" />
+    		<input>
+    			<soap:body use="literal" />
+    		</input>
+    		<output>
+    			<soap:body use="literal" />
+    		</output>
+    	</operation>
+    </binding>
+    <service name="WS_InvocationService">
+    	<port binding="tns:WS_InvocationBinding" name="WS_InvocationPort">
+    		<soap:address location="http://localhost:8080/WS_Invocation"/>
+    	</port>
+    </service>
+</definitions>

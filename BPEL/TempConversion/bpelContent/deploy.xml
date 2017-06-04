@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deploy xmlns="http://www.apache.org/ode/schemas/dd/2007/03" xmlns:temperature="http://webservices.daehosting.com/temperature">
+  <process name="temperature:WS_Invocation">
+    <active>true</active>
+    <retired>false</retired>
+    <process-events generate="all"/>
+    <provide partnerLink="client">
+      <service name="temperature:SimpleWSInvocationService" port="SimpleWSInvocationPort"/>
+    </provide>
+    <invoke partnerLink="TempConversionPL">
+      <service name="temperature:TemperatureConversions" port="TemperatureConversionsSoap"/>
+    </invoke>
+  </process>
+</deploy>
